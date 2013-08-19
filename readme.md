@@ -5,7 +5,7 @@ Sample EA - a simple moving average EA using TraderJet
 
 EA Multi - a multi-currency pair EA using TraderJet
 
-close\_all\_tj - a "close all orders" scipt using TraderJet
+close\_all\_tj - a "close all orders" script using TraderJet
 
 ####Instructions
 
