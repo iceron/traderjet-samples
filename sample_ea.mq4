@@ -99,18 +99,18 @@ int onTick() {
    return(lastError);
 }
 
-int onTrade() {
-   Print("onTrade(): ","trade entered: #"+orderTicket);
+int onTrade(int ticket) {
+   Print("onTrade(): ","trade entered: #"+ticket);
    return(0);
 }
 
-int onTradeModify() {
-   Print("onTradeModify(): ","trade entered: #"+orderTicket);
+int onTradeModify(int ticket) {
+   Print("onTradeModify(): ","trade entered: #"+ticket);
    return(0);
 }
 
-int onTradeClose() {
-   Print("onTradeClose(): ","trade exited: #"+orderTicket);
+int onTradeClose(int ticket) {
+   Print("onTradeClose(): ","trade exited: #"+ticket);
    return(0);
 }
 
@@ -160,7 +160,7 @@ int tradeOpen(int signal) {
    if (signal<=0) return(0);
    int ticket,total = orderCount();
    if (!signalIsEnabled(signal)) return(ticket);
-   int cmd = signalToCMD(signal);
+   int cmd = signalToCmd(signal);
    int cmdreverse = cmdReverse(cmd);
    tradeInit(cmd);
    if (SignalExitOpposite && total>0) {
@@ -173,7 +173,7 @@ int tradeOpen(int signal) {
    if (serverEntryEnabled) {
       total = orderCount();
       if (TradeMax>total)
-         ticket = cOrderSend(cmd,Lots,TradePrice,StopLoss,TakeProfit,TradeComment,TradeExpiration);
+         ticket = orderSend(cmd,Lots,TradePrice,StopLoss,TakeProfit,TradeComment,TradeExpiration);
    }
    tradeDeInit(cmd,ticket);
    return(ticket);
@@ -212,19 +212,20 @@ int filterMA() {
 }
 //**************************************************************************
 void loopOrderTasks() {
-   orderCheckEntry();
-   vstopSet(vstopStandardName,StopLoss,TakeProfit);
+   //orderCheckEntry();
+   vstopSet(vstopStandardName+vstopStopLossName,StopLoss);
+   vstopSet(vstopStandardName+vstopTakeProfitName,TakeProfit);
    trailingStopLoss(vstopStandardName,TrailingStopLossStart,TrailingStopLossStep,TrailingStopLossValue);
    vstopAdjust(vstopStandardName);
    vstopCheck(vstopStandardName);
-   vstopSet("p1",50,50);
+   vstopSet("p1",50);
    vstopCheck("p1",0.1);
-   vstopSet("p2",100,100);
+   vstopSet("p2",100);
    vstopCheck("p2",0.1);
 }
 
 void loopOrderHistoryTasks() {
-   orderCheckClose();
+   //orderCheckClose();
    vstopClean(vstopStandardName);
    vstopClean("p1");
    vstopClean("p2");
