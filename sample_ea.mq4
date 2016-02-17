@@ -87,9 +87,10 @@ int onDeInit() {
 
 int onTick() {
    symbolGet();
+   signalInit(5,5);
    int signalEntry = signalEntry();
    int signalExit = signalExit();
-   signalManage(signalEntry,signalExit);
+   signalManage(signalEntry,signalExit,TimeFrame);
    dashEAMainAdd();
    tradeExit(signalExit);
    tradeOpen(signalEntry);
@@ -188,6 +189,7 @@ void tradeExit(int signal) {
 //**************************************************************************
 int signalExit() {
    filterInit(filterExitNum);
+   ArrayInitialize(signalExitArray,0);
    int signal = CMD_NEUTRAL;
    signal = signalFilter(signalExitArray);
    return(signal);
@@ -195,6 +197,7 @@ int signalExit() {
 //**************************************************************************
 int signalEntry() {
    filterInit(filterEntryNum);
+   ArrayInitialize(signalEntryArray,0);
    int signal = CMD_VOID;
    if (true) filterAdd(filterMA(),signalEntryArray,filterEntryNum);
    signal = signalFilter(signalEntryArray);
